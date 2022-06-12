@@ -5,90 +5,95 @@ const ESLintWebpackPlugin = require("eslint-webpack-plugin");
 //处理html
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-module.exports ={
+module.exports = {
     //入口
-    entry:"./src/main.js",
+    entry: "./src/main.js",
     //输出
-    output:{
+    output: {
         //文件输出目录，必须是绝对路径
         // path.resolve()方法返回一个绝对路径
         // __dirname 当前文件的文件夹绝对路径
         // path:path.resolve(__dirname,"dist"),
-        path:undefined ,    //开发模式就不要输出了，看看就好
+        path: undefined,    //开发模式就不要输出了，看看就好
         //输出文件名
         filename: "static/js/main.js", // 将 js 文件输出到 static/js 目录中
         // clean:true , // 自动将(不是这次)打包的目录资源清空
     },
     //加载器(loader)
-    module:{
-        rules:[
+    module: {
+        rules: [
             {
-                //处理CSS资源  npm i css-loader style-loader -D
-                test: /\.css$/,   //匹配.css结尾文件        不要加引号，否则报错，会报没有合适loader
-                //use数组里面Loader执行顺序为从右到左
-                use:["style-loader","css-loader"]
-            },
-            {
-                //处理less资源
-                test: /\.less$/,
-                use: ["style-loader", "css-loader", "less-loader"],
-            },
-            {   
-                //下载 sass-loader同时下载sass
-                //处理scss/sass资源  
-                test: /\.s[ac]ss$/,
-                use: ["style-loader", "css-loader", "sass-loader"],
-            },
-            {
-                //stylus-loader：负责将 Styl 文件编译成 Css 文件
-                test: /\.styl$/,
-                use: ["style-loader", "css-loader", "stylus-loader"],
-            },
-            {
-                //处理图片资源  Webpack5 已经将两个 Loader（file-loader 和 url-loader） 功能内置到 Webpack 里了
-                test: /\.(png|jpe?g|gif|webp)$/,
-                // 资源模块类型(asset module type)，通过添加 4 种新的模块类型，来替换所有这些 webpack5之前的loader
-                // asset/resource 发送一个单独的文件并导出 URL。之前通过使用 file-loader 实现。
-                // asset/inline 导出一个资源的 data URI。之前通过使用 url-loader 实现。
-                // asset/source 导出资源的源代码。之前通过使用 raw-loader 实现。
-                // asset 在导出一个 data URI 和发送一个单独的文件之间自动选择。之前通过使用 url-loader，并且配置资源体积限制实现。
-                type: "asset",
-                
-                parser: {
-                    dataUrlCondition: {
-                      maxSize: 10 * 1024 // 小于10kb的图片会被base64处理  base64会把体积变大，所以处理小图
-                    }
-                },
-                generator: {
-                    // 将图片文件输出到 static/imgs 目录中
-                    // 将图片文件命名 [hash:8][ext][query]
-                    // [hash:8]: hash值取8位
-                    // [ext]: 使用之前的文件扩展名
-                    // [query]: 添加之前的query参数
-                    filename: "static/imgs/[hash:8][ext][query]",
-                },
+                oneOf: [
+                    {
+                        //处理CSS资源  npm i css-loader style-loader -D
+                        test: /\.css$/,   //匹配.css结尾文件        不要加引号，否则报错，会报没有合适loader
+                        //use数组里面Loader执行顺序为从右到左
+                        use: ["style-loader", "css-loader"]
+                    },
+                    {
+                        //处理less资源
+                        test: /\.less$/,
+                        use: ["style-loader", "css-loader", "less-loader"],
+                    },
+                    {
+                        //下载 sass-loader同时下载sass
+                        //处理scss/sass资源  
+                        test: /\.s[ac]ss$/,
+                        use: ["style-loader", "css-loader", "sass-loader"],
+                    },
+                    {
+                        //stylus-loader：负责将 Styl 文件编译成 Css 文件
+                        test: /\.styl$/,
+                        use: ["style-loader", "css-loader", "stylus-loader"],
+                    },
+                    {
+                        //处理图片资源  Webpack5 已经将两个 Loader（file-loader 和 url-loader） 功能内置到 Webpack 里了
+                        test: /\.(png|jpe?g|gif|webp)$/,
+                        // 资源模块类型(asset module type)，通过添加 4 种新的模块类型，来替换所有这些 webpack5之前的loader
+                        // asset/resource 发送一个单独的文件并导出 URL。之前通过使用 file-loader 实现。
+                        // asset/inline 导出一个资源的 data URI。之前通过使用 url-loader 实现。
+                        // asset/source 导出资源的源代码。之前通过使用 raw-loader 实现。
+                        // asset 在导出一个 data URI 和发送一个单独的文件之间自动选择。之前通过使用 url-loader，并且配置资源体积限制实现。
+                        type: "asset",
 
-            },
-            {
-                //处理其他资源
-                test: /\.(ttf|woff2?|map4|map3|avi)$/,
-                type: "asset/resource",
-                generator: {
-                  filename: "static/media/[hash:8][ext][query]",
-                },
-            },
-            {
-                //使用bable 向下兼容
-                test: /\.js$/,
-                exclude: /node_modules/, // 排除node_modules代码不编译
-                loader: "babel-loader",
-            },
+                        parser: {
+                            dataUrlCondition: {
+                                maxSize: 10 * 1024 // 小于10kb的图片会被base64处理  base64会把体积变大，所以处理小图
+                            }
+                        },
+                        generator: {
+                            // 将图片文件输出到 static/imgs 目录中
+                            // 将图片文件命名 [hash:8][ext][query]
+                            // [hash:8]: hash值取8位
+                            // [ext]: 使用之前的文件扩展名
+                            // [query]: 添加之前的query参数
+                            filename: "static/imgs/[hash:8][ext][query]",
+                        },
 
-            
+                    },
+                    {
+                        //处理其他资源
+                        test: /\.(ttf|woff2?|map4|map3|avi)$/,
+                        type: "asset/resource",
+                        generator: {
+                            filename: "static/media/[hash:8][ext][query]",
+                        },
+                    },
+                    {
+                        //使用bable 向下兼容
+                        test: /\.js$/,
+                        exclude: /node_modules/, // 排除node_modules代码不编译
+                        loader: "babel-loader",
+                    },
+                ]
+            }
+
+
+
         ],
     },
     //插件(plugin)
-    plugins:[
+    plugins: [
         new ESLintWebpackPlugin({
             // 指定检查文件的根目录
             context: path.resolve(__dirname, "../src"),
@@ -105,8 +110,10 @@ module.exports ={
         host: "localhost", // 启动服务器域名
         port: "3000", // 启动服务器端口号
         open: true, // 是否自动打开浏览器
+        hot: true //开启HMR功能（只能用于开发环境，生产环境不需要了）
     },
     //模式  开发模式
-    mode:"development",
-
+    mode: "development",
+    //只有行映射
+    devtool: "cheap-module-source-map",
 }
