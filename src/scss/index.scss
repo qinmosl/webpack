@@ -1,0 +1,23 @@
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.fa{
+    width: 200px;
+    height: 200px;
+    // background-color: gray;
+    background-image: url("../img/ecy-10.jpg");
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .ch{
+        width: 100px;
+        height: 100px;
+        // background-color: skyblue;
+        background-image: url("../img/ecy-11.jpg");
+        background-size: cover;
+    }
+}
